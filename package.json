@@ -1,0 +1,50 @@
+{
+  "name": "hermit-api",
+  "version": "1.0.0",
+  "description": "RESTful API to multiplayer match management system.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest",
+    "start": "tsx index.ts",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsx watch index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FlightofIcarus/hermit-api.git"
+  },
+  "author": "Icaro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FlightofIcarus/hermit-api/issues"
+  },
+  "homepage": "https://github.com/FlightofIcarus/hermit-api#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@types/bcryptjs": "^3.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.0.15",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.31.0",
+    "globals": "^16.3.0",
+    "ts-jest": "^29.4.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "jest": "^30.0.5",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
