@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 
 class PlayerController {
   static async createPlayer(req: Request, res: Response): Promise<Response> {
@@ -26,5 +26,5 @@ class PlayerController {
   };
 };
 
-export { PlayerController };
+export default PlayerController;
 
