@@ -5,10 +5,8 @@ type RouteHandler = (req: Request, res: Response) => void;
 type RouteMethod = "get" | "post" | "put" | "delete" | "patch";
 
 export default class RouterManager {
-    private router: Router;
-
-    constructor() {
-        this.router = Router();
+    
+    constructor(private readonly router: Router) {
     }
 
     setRoute(url: string, method: RouteMethod, handler: RouteHandler): void {
