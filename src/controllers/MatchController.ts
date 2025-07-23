@@ -1,7 +1,6 @@
-import { log } from "console";
 import { Request, Response } from "express";
 
-export default class MatchController {
+class MatchController {
     static async getOpenedMatchs(req : Request, res: Response): Promise<Response> {
         return res.status(200).json({
             openedMatchList: [
@@ -92,3 +91,5 @@ export default class MatchController {
         });
     };
 };
+
+export default MatchController;
