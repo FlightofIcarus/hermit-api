@@ -1,8 +1,5 @@
 import { Sequelize, Options, Attributes } from "sequelize";
-// import path = require("node:path");
-// import { Match } from "../models/ModelMatch";
-// import { Player } from "../models/ModelPlayer";
-// import { Score } from "../models/ModelScore";
+
 
 type DbDialect = "mysql" | "sqlite" | "postgres" | "mariadb";
 
@@ -32,24 +29,3 @@ class DatabaseManager {
 
 export { DatabaseManager };
 
-// const dbPath = path.join(__dirname, "hermitgame.db");
-
-
-    
-// const mydb = new DatabaseManager({
-// dialect: "sqlite",
-// storage: dbPath,
-// });
-
-// const match = mydb.defineModels("Match", new Match().getAttributes());
-// const player = mydb.defineModels("Player", new Player().getAttributes());
-// const score = mydb.defineModels("Score", new Score().getAttributes());
-
-// match.belongsTo(player);
-// player.hasMany(match);
-// match.hasMany(score);
-// score.belongsTo(match);
-
-// mydb.syncModels();
-
-// export { match, player, score };
