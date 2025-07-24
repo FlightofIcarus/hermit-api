@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const { createDefaultPreset } = require("ts-jest");
 
 const tsJestTransformCfg = createDefaultPreset().transform;
