@@ -3,7 +3,7 @@ class Score implements IScore {
         public id: number,
         public playerId: number,
         public matchId: number,
-        public score: score
+        public score: ScorePoints
     ) {}
 };
 
