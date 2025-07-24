@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 class MatchController {
     /**
      * @swagger
-     * /matchs/opened:
+     * /matches/opened:
      *  get:
      *    summary: Retrieve a list of opened matches
      *    description: Get a list of matches that are currently open
@@ -53,7 +53,7 @@ class MatchController {
 
     /**
      * @swagger
-     * /matchs:
+     * /matches:
      *  post:
      *    summary: Create a new match
      *    description: Create a new match
@@ -94,7 +94,7 @@ class MatchController {
 
     /**
      * @swagger
-     * /matchs/{matchid}/players/{playerid}:
+     * /matches/{matchid}/players/{playerid}:
      *  post:
      *    summary: Join a player to a match
      *    description: Add a player to an opened match using match ID and player ID
@@ -134,7 +134,7 @@ class MatchController {
 
     /**
      * @swagger
-     * /matchs/{matchid}/players/{playerid}:
+     * /matches/{matchid}/players/{playerid}:
      *  delete:
      *    summary: Leave a match
      *    description: Remove a player from an opened match using match ID and player ID
@@ -178,7 +178,7 @@ class MatchController {
 
     /**
      * @swagger
-     * /matchs:
+     * /matches:
      *  get:
      *    summary: Get the match history
      *    description: Get the match history
@@ -280,7 +280,7 @@ class MatchController {
 
     /**
      * @swagger
-     * /matchs/{matchid}:
+     * /matches/{matchid}:
      *  patch:
      *    summary: Update match status
      *    description: Update the status of a match using match ID
