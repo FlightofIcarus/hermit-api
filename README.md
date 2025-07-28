@@ -19,13 +19,9 @@ ORM (Object-Relational Mapper): Sequelize
 
 Banco de Dados: SQLite3
 
-Autenticação/Autorização: JSON Web Token (jsonwebtoken) para criação e verificação de tokens, e bcryptjs para hashing de senhas.
-
-Validação de Entrada: (Conforme mencionado na estrutura de pastas) src/validators/
+Autenticação/Autorização: bcryptjs para hashing de senhas.
 
 Documentação da API: Swagger (swagger-jsdoc e swagger-ui-express)
-
-Variáveis de Ambiente: dotenv
 
 CORS: cors
 
@@ -158,7 +154,7 @@ npm run dev
 ```
 
 Modo de Produção:
-Para compilar e iniciar a API (ideal para ambientes de produção, se fosse ser posta "online" realmente.):
+Para compilar e iniciar a API (ideal para ambientes de produção, se fosse ser colocar "online" realmente.):
 
 ```
 Bash
