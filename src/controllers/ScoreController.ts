@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
+import { ScoreService } from "../services/ScoreService";
+import { ScoreData } from "../views/inputDTOs/inputedScoreData.DTO";
+
 
 class ScoreController {
+
+    constructor(private scoreService: ScoreService) {}
     /**
      * @swagger
      * /scores:
@@ -62,12 +67,14 @@ class ScoreController {
      *                      type: integer
      *                      description: The total damage
      */
-    static async postScore(req: Request, res: Response): Promise<void> {
-        const { match: matchId } = req.query;
-        const score = req.body;
-
-        res.status(201).json({
-            message: `Score from ${matchId}`,
+    postScore = async (req: Request, res: Response): Promise<Response> =>{
+        const scoreData = await req.body;
+        const score = new ScoreData(Number(scoreData.matchId), scoreData.playerId, scoreData.points_made, scoreData.points_conceded);
+        const response = await this.scoreService.createScoreByPlayerId(score);
+        if (!response){ 
+            return res.status(409).json({ message: "Score not created. Only one score per player per match." });}
+        return res.status(201).json({
+            message: `Score from ${scoreData.matchId}`,
             score
         });
     };

@@ -1,6 +1,12 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
+import { MatchPlayerTable, MatchTable, PlayerTable } from "../config/dbInitialize";
+import { Match } from "../models/sequelize/ModelMatch";
+import { MatchService } from "../services/MatchService";
 
 class MatchController {
+    
+    constructor(private matchService: MatchService){}
+
     /**
      * @swagger
      * /matches/opened:
@@ -32,23 +38,9 @@ class MatchController {
      *                        type: string
      *                        format: date
      */
-    static async getOpenedMatchs(req: Request, res: Response): Promise<Response> {
-        return res.status(200).json({
-            openedMatchList: [
-                {
-                    id: 1,
-                    title: "Match 1",
-                    status: "open",
-                    startedAt: "2025-07-22"
-                },
-                {
-                    id: 2,
-                    title: "Match 2",
-                    status: "open",
-                    startedAt: "2025-07-22"
-                }
-            ]
-        });
+    getOpenedMatchs = async (req: Request, res: Response): Promise<Response> => {
+        const response = await this.matchService.listOpenMatches();
+        return res.status(200).json(response);
     }
 
     /**
@@ -87,9 +79,19 @@ class MatchController {
      *                  type: string
      *                  description: A success message
      */
-    static async postMatch(req: Request, res: Response): Promise<Response> {
+    postMatch = async (req: Request, res: Response): Promise<Response> => {
+
+        const matchData = await req.body;
+
+        const match = await this.matchService.createMatch({
+            match_name: matchData.match_name,
+            started_at: matchData.started_at,
+            status: matchData.status,
+            playerId: matchData.playerId
+        })
+        console.log(match);
         return res.status(201).json({
-            message: "Match created successfully"})
+            message: "Match created successfully", matchInfo: match})
     };
 
     /**
@@ -125,10 +127,19 @@ class MatchController {
      *                  type: string
      *                  description: A success message
      */
-    static async postOpenedMatch(req: Request, res: Response): Promise<Response> {
-        const matchId = req.params.matchid;
+    postOpenedMatch = async (req: Request, res: Response): Promise<Response> => {
+        const {matchid: matchId, playerid: playerId} = await req.params;
+        console.log(matchId);
+        const response = await this.matchService.joinMatch(matchId, playerId);
+        // console.log(response);
+        
+        if (!response) {
+          return res.status(404).json({
+            message: `The match ${matchId} is full or player ${playerId} is already in the match. Sorry!`
+          });  
+        }
         return res.status(200).json({
-            message: `You joined to the match ${matchId} successfully`
+            message: `Player ${playerId} joined to the match ${matchId} successfully`
         });
     }
 
@@ -165,17 +176,20 @@ class MatchController {
      *                  type: string
      *                  description: A success message
      */
-    static async deleteOpenedMatch(req: Request, res: Response): Promise<Response> {
+    deleteOpenedMatch = async (req: Request, res: Response): Promise<Response> => {
+        const {matchid: matchId, playerid: playerId} = await req.params;
+        console.log(matchId);
+        const response = await this.matchService.leaveMatch(matchId, playerId);
+        // console.log(response);
         
-        const requestBody = req.body;
-        const matchId = req.params.matchid;
-
-        console.log(typeof matchId);
-
+        if (!response) {
+          return res.status(404).json({
+            message: `This player ${playerId} is not in the match ${matchId}.`
+          })} 
         return res.status(200).json({
-            message: `You leaved the match ${matchId} successfully`})
-    };
-
+            message: `Player ${playerId} leaved to the match ${matchId} successfully`
+        });
+    }
     /**
      * @swagger
      * /matches:
@@ -241,41 +255,18 @@ class MatchController {
      *                            type: integer
      *                            description: The total damage
      */
-    static async getMatchHistory(req: Request, res: Response): Promise<Response> {
+    getMatchHistory = async (req: Request, res: Response): Promise<Response> => {
         const {status, player: playerId} = req.query;
-        console.log(typeof playerId);
-        
-
-        return res.status(200).json({
-            message: `Showing ${status} match history from player ${playerId}`,
-
-            matchHistory: [
-                {
-                    id: 1,
-                    title: "Match 1",
-                    status: "completed",
-                    startedAt: "2025-07-20",
-                    score: {
-                        kills: 10,
-                        deaths: 4,
-                        assists: 2,
-                        totalDamage: 40000,
-                    }
-                },
-                {
-                    id: 2,
-                    title: "Match 2",
-                    status: "completed",
-                    startedAt: "2025-07-21",
-                    score: {
-                        kills: 8,
-                        deaths: 5,
-                        assists: 3,
-                        totalDamage: 35000,
-                    }
-                }
-            ]
-        });
+        if(status === 'finished'){
+        const matchHistory = await this.matchService.listFinishedMatches((playerId || '') as string);
+            if (!matchHistory) {
+                return res.status(404).json({ error: "Player not found. Impossible to show match history." });}
+            
+            return res.status(200).json({
+            message: `Showing ${status} match history from player ${playerId}.`,
+            matchHistory: matchHistory
+        });}else {
+            return res.status(400).json({ error: "An unknown error occurred." });}
     }
 
     /**
@@ -315,13 +306,22 @@ class MatchController {
      *                  type: string
      *                  description: A success message
      */
-    static async patchMatchStatus(req: Request, res: Response): Promise<Response> {
+    patchMatchStatus = async(req: Request, res: Response): Promise<Response> => {
         const matchId = req.params.matchid;
         const newStatus = req.body.status;
-
+        if(newStatus !== 'finished' && newStatus !== 'in_progress' && newStatus !== 'waiting'){ 
+        return res.status(400).json({error: 'Invalid status'})
+        } else if(newStatus === 'in_progress'){
+            await this.matchService.startMatch(matchId, newStatus);
+            return res.status(200).json({
+                message: `Match ${matchId} started!`
+            });
+        } else if(newStatus === 'finished'){
+        await this.matchService.finishMatch(matchId, newStatus);
         return res.status(200).json({
-            message: `Match ${matchId} status updated to ${newStatus}`
+            message: `Match ${matchId} finished!`
         });
+    } return res.status(400).json({ error: "An unknown error occurred." })
     };
 };
 
