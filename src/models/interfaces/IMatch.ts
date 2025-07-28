@@ -8,3 +8,6 @@ interface IMatch {
     players: IPlayer[];
     scores: IScore[];
 };
+
+export type { MatchStatus};
+export { IMatch };
