@@ -1,3 +1,5 @@
+import { IMatch, MatchStatus } from "./interfaces/IMatch";
+
 class Match implements IMatch {
     constructor(
     public id: number,
