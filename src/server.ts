@@ -3,8 +3,11 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { router } from "./routes";
 import { swaggerSpec } from "./swagger.config";
+import { mydb } from "./config/dbInitialize";
 
 const server: Express = express();
+
+mydb.syncModels();
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
